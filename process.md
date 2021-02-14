@@ -118,3 +118,40 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 ```
+## signal.c
+```C
+#include <stdio.h>
+#include <unistd.h>
+#include <signal.h>
+
+void timeout(int sig) {
+    if(sig == SIGALRM) {
+        puts("Time out");
+    alarm(2);
+    }
+}
+
+void keycontrol(int sig) {
+    if(sig == SIGINT) {
+        puts("CTRL+C pressed");
+    }
+}
+
+int main(int argc, char **argv) {
+    int i;
+    signal(SIGALRM, timeout);
+    signal(SIGINT, keycontrol);
+    alarm(2);
+    for(i = 0; i < 3; i++) {
+        puts("Wait...");
+        sleep(100);
+    }
+    return 0;
+}
+
+/*
+Wait -> Time out -> Wait -> Time out -> Wait -> Time out 
+[0]                 [1]                 [2]
+시그널이 발생하면 sleep 함수의 호출로 블로킹 상태에 있던 프로세스가 깨어난다.
+*/
+```
