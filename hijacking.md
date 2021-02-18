@@ -112,3 +112,18 @@ my_array[4] = 15
 Done
 [Inferior 1 (process 5221) exited normally]
 ```
+# GDB command disass
+```
+(gdb) disass main
+Dump of assembler code for function main:
+   0x00005555555551a6 <+0>:	push   %rbp
+   0x00005555555551a7 <+1>:	mov    %rsp,%rbp
+   0x00005555555551aa <+4>:	mov    $0x0,%eax
+   0x00005555555551af <+9>:	call   0x555555555145 <print_array>
+   0x00005555555551b4 <+14>:	lea    0xe5c(%rip),%rdi        # 0x555555556017
+   0x00005555555551bb <+21>:	call   0x555555555030 <puts@plt>
+   0x00005555555551c0 <+26>:	mov    $0x0,%eax
+   0x00005555555551c5 <+31>:	pop    %rbp
+   0x00005555555551c6 <+32>:	ret
+End of assembler dump.
+```
