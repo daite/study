@@ -267,3 +267,33 @@ _start:
 * nasm -f elf64 hello.asm -o hello.o
 * ld hello.o -o hello
 * ./hello
+```
+┌──(kali㉿kali)-[~/code]
+└─$ objdump -D -M intel hello
+
+hello:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000401000 <_start>:
+  401000:	b8 01 00 00 00       	mov    eax,0x1
+  401005:	bf 01 00 00 00       	mov    edi,0x1
+  40100a:	48 be 00 20 40 00 00 	movabs rsi,0x402000
+  401011:	00 00 00
+  401014:	ba 0c 00 00 00       	mov    edx,0xc
+  401019:	0f 05                	syscall
+  40101b:	b8 3c 00 00 00       	mov    eax,0x3c
+  401020:	bf 01 00 00 00       	mov    edi,0x1
+  401025:	0f 05                	syscall
+
+Disassembly of section .data:
+
+0000000000402000 <mytest>:
+  402000:	68 65 6c 6c 6f       	push   0x6f6c6c65
+  402005:	2c 77                	sub    al,0x77
+  402007:	6f                   	outs   dx,DWORD PTR ds:[rsi]
+  402008:	72 6c                	jb     402076 <_end+0x66>
+  40200a:	64                   	fs
+  40200b:	0a                   	.byte 0xa
+ ```
