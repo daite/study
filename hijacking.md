@@ -395,3 +395,29 @@ Disassembly of section .data:
     22	    syscall
     23
 ```
+```
+Disassembly of section .text:
+
+0000000000401000 <_start>:
+  401000:	eb 0c                	jmp    40100e <mycode>
+
+0000000000401002 <mytext>:
+  401002:	68 65 6c 6c 6f       	push   0x6f6c6c65
+  401007:	2c 77                	sub    al,0x77
+  401009:	6f                   	outs   dx,DWORD PTR ds:[rsi]
+  40100a:	72 6c                	jb     401078 <mycode+0x6a>
+  40100c:	64 0a      	or     dh,BYTE PTR fs:[rax-0xceb7ff]
+
+000000000040100e <mycode>:
+  40100e:	b0 01                	mov    al,0x1
+  401010:	48 31 ff             	xor    rdi,rdi
+  401013:	48 83 c7 01          	add    rdi,0x1
+  401017:	48 8d 35 e4 ff ff ff 	lea    rsi,[rip+0xffffffffffffffe4]        # 401002 <mytext>
+  40101e:	48 31 d2             	xor    rdx,rdx
+  401021:	48 83 c2 0c          	add    rdx,0xc
+  401025:	0f 05                	syscall
+  401027:	b0 3c                	mov    al,0x3c
+  401029:	48 31 ff             	xor    rdi,rdi
+  40102c:	48 83 c7 01          	add    rdi,0x1
+  401030:	0f 05                	syscall
+```
