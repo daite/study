@@ -296,3 +296,53 @@ Disassembly of section .data:
   40200a:	64                   	fs
   40200b:	0a                   	.byte 0xa
  ```
+# 4. Shell code
+```asm
+     1	; remove null bytes
+     2	section .data
+     3	    mytest: db "hello,world", 0xa
+     4
+     5	section .text
+     6	    global _start
+     7
+     8	_start:
+     9	    mov al, 1
+    10	    xor rdi, rdi
+    11	    add rdi, 1
+    12	    mov rsi, mytest
+    13	    xor rdx, rdx
+    14	    add rdx, 12
+    15	    syscall
+    16
+    17	    mov al, 60
+    18	    xor rdi, rdi
+    19	    add rdi, 1
+    20	    syscall
+```
+```
+Disassembly of section .text:
+
+0000000000401000 <_start>:
+  401000:	b0 01                	mov    al,0x1
+  401002:	48 31 ff             	xor    rdi,rdi
+  401005:	48 83 c7 01          	add    rdi,0x1
+  401009:	48 be 00 20 40 00 00 	movabs rsi,0x402000 //  still have null bytes.
+  401010:	00 00 00
+  401013:	48 31 d2             	xor    rdx,rdx
+  401016:	48 83 c2 0c          	add    rdx,0xc
+  40101a:	0f 05                	syscall
+  40101c:	b0 3c                	mov    al,0x3c
+  40101e:	48 31 ff             	xor    rdi,rdi
+  401021:	48 83 c7 01          	add    rdi,0x1
+  401025:	0f 05                	syscall
+
+Disassembly of section .data:
+
+0000000000402000 <mytest>:
+  402000:	68 65 6c 6c 6f       	push   0x6f6c6c65
+  402005:	2c 77                	sub    al,0x77
+  402007:	6f                   	outs   dx,DWORD PTR ds:[rsi]
+  402008:	72 6c                	jb     402076 <_end+0x66>
+  40200a:	64                   	fs
+  40200b:	0a                   	.byte 0xa
+```
