@@ -176,3 +176,71 @@ Breakpoint 2, main () at mem_region.c:18
 (gdb) p &a
 $2 = (int *) 0x7fffffffe38c
 ```
+## stackframe check
+```C
+     1	#include <stdio.h>
+     2
+     3	long func(long a, long b) {
+     4	    long x = 0;
+     5	    long y = 0;
+     6	    x  = a * a;
+     7	    y  = b * b;
+     8
+     9	    return x + y;
+    10	}
+    11
+    12	int main() {
+    13	    long z = func(3, 5);
+    14	    printf("3^2 + 5^2 = %d\n", z);
+    15	    return 0;
+    16	}
+```
+* X86_64의 경우 함수의 매개변수 1~6은 차례로 레지스터 **rdi, rsi, rdx, r10, r8, r9** 에 저장된다.
+```
+Breakpoint 1, func (a=3, b=5) at stack_frame_check.c:4
+4	    long x = 0;
+(gdb) p $rdi
+$1 = 3
+(gdb) p $rsi
+$2 = 5
+```
+```
+(gdb) p &x
+$3 = (long *) 0x7fffffffe368 // X가 Y보다 먼저 stack에 PUSH;
+(gdb) step
+6	    x  = a * a;
+(gdb) p &y
+$4 = (long *) 0x7fffffffe360
+gdb) x/32xw $rsp - 64
+0x7fffffffe340:	0x00f0b6ff	0x00000000	0x000000c2	0x00000000
+0x7fffffffe350:	0x00000005	0x00000000	0x00000003	0x00000000
+0x7fffffffe360:	0x00000019	0x00000000	0x00000009	0x00000000
+0x7fffffffe370:	0xffffe390	0x00007fff	0x5555518d	0x00005555
+0x7fffffffe380:	0xffffe480	0x00007fff	0x00000022	0x00000000
+0x7fffffffe390:	0x555551b0	0x00005555	0xf7e16d0a	0x00007fff
+0x7fffffffe3a0:	0xffffe488	0x00007fff	0x00000000	0x00000001
+0x7fffffffe3b0:	0x55555176	0x00005555	0xf7e167cf	0x00007fff
+```
+```
+(gdb) disass main
+Dump of assembler code for function main:
+   0x0000555555555176 <+0>:	push   %rbp
+   0x0000555555555177 <+1>:	mov    %rsp,%rbp
+   0x000055555555517a <+4>:	sub    $0x10,%rsp
+   0x000055555555517e <+8>:	mov    $0x5,%esi
+   0x0000555555555183 <+13>:	mov    $0x3,%edi
+   0x0000555555555188 <+18>:	call   0x555555555135 <func>
+   0x000055555555518d <+23>:	mov    %rax,-0x8(%rbp)
+=> 0x0000555555555191 <+27>:	mov    -0x8(%rbp),%rax
+   0x0000555555555195 <+31>:	mov    %rax,%rsi
+   0x0000555555555198 <+34>:	lea    0xe65(%rip),%rdi        # 0x555555556004
+   0x000055555555519f <+41>:	mov    $0x0,%eax
+   0x00005555555551a4 <+46>:	call   0x555555555030 <printf@plt>
+   0x00005555555551a9 <+51>:	mov    $0x0,%eax
+   0x00005555555551ae <+56>:	leave
+   0x00005555555551af <+57>:	ret
+```
+```
+ 0x7fffffffe370:	0xffffe390	0x00007fff	0x5555518d	0x00005555
+<---- Lower adderess  Y ---  X  ---  base pointer -- return address -----> higher address
+```
