@@ -112,7 +112,7 @@ my_array[4] = 15
 Done
 [Inferior 1 (process 5221) exited normally]
 ```
-# GDB command disass
+## GDB command disass
 ```
 (gdb) disass main
 Dump of assembler code for function main:
@@ -126,4 +126,39 @@ Dump of assembler code for function main:
    0x00005555555551c5 <+31>:	pop    %rbp
    0x00005555555551c6 <+32>:	ret
 End of assembler dump.
+```
+# 2. Memory region for programming
+```C
+ // mem_region.c
+     1	#include <stdio.h>
+     2	#include <stdlib.h>
+     3
+     4	int my_global_var = 99;
+     5
+     6	int add(int a) {
+     7	    int b = a + my_global_var;
+     8	    return b;
+     9	}
+    10
+    11	int main() {
+    12	    int *ptr = (int *)malloc(sizeof(int) * 3);
+    13	    ptr[0] = 0;
+    14	    ptr[1] = 1;
+    15	    ptr[2] = add(1);
+    16	    printf("ptr[0] = %d, ptr[1] = %d, ptr[2] = %d\n", ptr[0], ptr[1], ptr[2]);
+    17	    return 0;
+    18	}
+```
+## [memory region](https://courses.engr.illinois.edu/cs225/fa2020/resources/stack-heap/)
+```
+$1 = (int *) 0x555555558038 <my_global_var> ; data region
+(gdb) p &b
+$2 = (int *) 0x7fffffffe36c ; stack region
+(gdb) continue
+Continuing.
+
+Breakpoint 2, main () at mem_region.c:16
+16	    printf("ptr[0] = %d, ptr[1] = %d, ptr[2] = %d\n", ptr[0], ptr[1], ptr[2]);
+(gdb) p ptr
+$3 = (int *) 0x5555555592a0 ; heap region
 ```
