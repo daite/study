@@ -17,7 +17,6 @@
     12	    printf("%s\n", "Done");
     13	}
     14
-}
 ```
 ## GDB step command
 1. gcc -g array.c -o array
