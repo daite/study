@@ -244,3 +244,26 @@ Dump of assembler code for function main:
  0x7fffffffe370:	0xffffe390	0x00007fff	0x5555518d	0x00005555
 <---- Lower adderess  Y ---  X  ---  base pointer -- return address -----> higher address
 ```
+# 3. Assembly language
+```asm
+; hello.asm
+section .data
+    mytest: db "hello,world", 0xa
+
+section .text
+    global _start
+
+_start:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, mytest
+    mov rdx, 12
+    syscall
+
+    mov rax, 60
+    mov rdi, 1
+    syscall
+```
+> nasm -f elf64 hello.asm -o hello.o
+> ld hello.o -o hello
+> ./hello
