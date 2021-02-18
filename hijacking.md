@@ -371,31 +371,6 @@ Disassembly of section .data:
     22	    syscall
 ```
 ```
-     1	; hello.asm
-     2
-     3	section .text
-     4	    global _start
-     5
-     6	_start:
-     7	    jmp mycode
-     8	    mytext: db "hello,world", 0xa
-     9
-    10	mycode:
-    11	    mov al, 1
-    12	    xor rdi, rdi
-    13	    add rdi, 1
-    14	    lea rsi, [rel mytext]
-    15	    xor rdx, rdx
-    16	    add rdx, 12
-    17	    syscall
-    18
-    19	    mov al, 60
-    20	    xor rdi, rdi
-    21	    add rdi, 1
-    22	    syscall
-    23
-```
-```
 Disassembly of section .text:
 
 0000000000401000 <_start>:
