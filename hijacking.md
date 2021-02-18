@@ -264,6 +264,6 @@ _start:
     mov rdi, 1
     syscall
 ```
-> nasm -f elf64 hello.asm -o hello.o
-> ld hello.o -o hello
-> ./hello
+* nasm -f elf64 hello.asm -o hello.o
+* ld hello.o -o hello
+* ./hello
