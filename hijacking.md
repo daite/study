@@ -162,4 +162,17 @@ Breakpoint 2, main () at mem_region.c:16
 (gdb) p ptr
 $3 = (int *) 0x5555555592a0 ; heap region
 ```
-![mem_region](https://raw.githubusercontent.com/daite/study/main/images/mem_region.png)
+```
+// main 함수가 add 함수 보다 stack에 먼저 PUSH됨을 확인
+Breakpoint 1, add (a=1) at mem_region.c:8
+8	    return b;
+(gdb) p &b
+$1 = (int *) 0x7fffffffe36c
+(gdb) continue
+Continuing.
+
+Breakpoint 2, main () at mem_region.c:18
+18	    printf("ptr[0] = %d, ptr[1] = %d, ptr[2] = %d\n", ptr[0], ptr[1], ptr[2]);
+(gdb) p &a
+$2 = (int *) 0x7fffffffe38c
+```
