@@ -162,3 +162,4 @@ Breakpoint 2, main () at mem_region.c:16
 (gdb) p ptr
 $3 = (int *) 0x5555555592a0 ; heap region
 ```
+![mem_region](https://raw.githubusercontent.com/daite/study/main/images/mem_region.png)
