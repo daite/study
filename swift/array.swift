@@ -55,3 +55,13 @@ print(arr1[0..<1]) // [1]
 var a = [1, 2, 3, 4, 5]
 a[1...3] = [12, 13]
 print(a) // [1, 12, 13, 5]
+
+// sort
+var arrayOne = [9, 3, 6, 2, 8, 5]
+arrayOne.sort() {$0 < $1}
+print(arrayOne) // [2, 3, 5, 6, 8, 9]
+
+// filter
+var arrayTwo = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+let f = arrayTwo.filter{$0 > 3 && $0 < 7}
+print(f) // [4, 5, 6]
