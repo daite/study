@@ -1,4 +1,4 @@
-#
+## [Tutorial](https://www.youtube.com/c/TensorProgramming/search?query=rust)
 [Trait std::ops::Index](https://doc.rust-lang.org/std/ops/trait.Index.html)
 ```rust
 fn main() {
